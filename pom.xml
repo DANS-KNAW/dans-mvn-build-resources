@@ -21,6 +21,7 @@
         <groupId>nl.knaw.dans.shared</groupId>
         <artifactId>dans-mvn-base</artifactId>
         <version>2.0.0</version>
+        <relativePath>../dans-mvn-base</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>dans-mvn-build-resources</artifactId>
