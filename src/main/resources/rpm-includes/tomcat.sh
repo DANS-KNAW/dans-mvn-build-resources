@@ -43,3 +43,19 @@ tomcat_create_log_directory() {
     exit_if_failed "Could not change ownership of $LOG_DIR to tomcat."
     echo "OK"
 }
+
+tomcat_copy_to_catalina_localhost() {
+    # Parameters
+    local MODULE_NAME=$1
+    local FILE_NAME=$2
+
+    # Constants
+    local INSTALL_BASE=/opt/dans.knaw.nl
+    local SOURCE=$INSTALL_BASE/$MODULE_NAME/bin/$FILE_NAME
+    local TARGET=/etc/tomcat/Catalina/localhost/
+
+    echo -n "Copying $SOURCE to $TARGET..."
+    cp -f $SOURCE $TARGET
+    exit_if_failed "Could not copy $SOURCE to $TARGET"
+    echo "OK"
+}
