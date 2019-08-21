@@ -19,9 +19,7 @@
 import os, sys, functions
 
 def print_usage():
-    print "Emulates a mvn deploy to deploy an RPM to a Nexus Yum repository:"
-    print "1. Builds the snapshot"
-    print "2. Uploads the resulting SNAPSHOT RPM to the Nexus Yum repository"
+    print "Uploads a SNAPSHOT RPM to the Nexus Yum repository"
     print "Usage: ./deploy-snapshot-rpm.py <nexus_account> <nexus_password> <repo-url> <build_dir>"
 
 
@@ -35,12 +33,5 @@ if __name__ == '__main__':
     repo_url = sys.argv[3]
     build_dir = sys.argv[4]
 
-    # Note: this will delete this script, but it will stay in memory to finish execution
-    exitStatus = os.system('mvn -f %s/.. clean install' % build_dir)
-    if exitStatus != 0:
-        print "Maven build failed with exit status: %s" % exitStatus
-        exit(2)
-    else:
-        print "SNAPSHOT successfully built. Deploying to Yum..."
-        functions.deploy_rpm(nexus_account, nexus_password, repo_url, build_dir)
+    functions.deploy_rpm(nexus_account, nexus_password, repo_url, build_dir)
 
