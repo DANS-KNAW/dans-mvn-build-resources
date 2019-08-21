@@ -62,4 +62,4 @@ if __name__ == '__main__':
     snapshot = sys.argv[5]
 
     deploy_rpm(nexus_account, nexus_password, repo_url, build_dir, snapshot.lower() == "true")
-    print "Deployed RPM to %s"
+    print "Deployed RPM to %s" % repo_url
