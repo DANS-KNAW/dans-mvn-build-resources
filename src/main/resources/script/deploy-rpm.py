@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #
 # Copyright (C) 2018 DANS - Data Archiving and Networked Services (info@dans.knaw.nl)
 #
@@ -14,15 +15,22 @@
 # limitations under the License.
 #
 
-import glob, re, requests, os
+import glob
+import os
+import re
+import requests
+import sys
+
 from requests.auth import HTTPBasicAuth
 
 snapshot_pattern = re.compile('^.*/[^/]+SNAPSHOT[^/]+\.rpm$')
 
+
 def is_snapshot(rpm):
     return snapshot_pattern.match(rpm) is not None
 
-def deploy_rpm(nexus_account, nexus_password, repo_url, build_dir, snapshot = True):
+
+def deploy_rpm(nexus_account, nexus_password, repo_url, build_dir, snapshot=True):
     rpms = glob.glob("%s/rpm/*/RPMS/*/*.rpm" % build_dir)
     if len(rpms) == 1:
         rpm = rpms[0]
@@ -37,5 +45,21 @@ def deploy_rpm(nexus_account, nexus_password, repo_url, build_dir, snapshot = Tr
         raise Exception("Expected 1 RPM found %s, paths: %s" % (len(rpms), ','.join(rpms)))
 
 
+def print_usage():
+    print "Uploads a SNAPSHOT RPM to the Nexus Yum repository"
+    print "Usage: ./deploy-rpm.py <nexus_account> <nexus_password> <repo-url> <build_dir> <snapshot>"
 
 
+if __name__ == '__main__':
+    if len(sys.argv) < 5:
+        print_usage()
+        exit(1)
+
+    nexus_account = sys.argv[1]
+    nexus_password = sys.argv[2]
+    repo_url = sys.argv[3]
+    build_dir = sys.argv[4]
+    snapshot = sys.argv[5]
+
+    deploy_rpm(nexus_account, nexus_password, repo_url, build_dir, snapshot.lower() == "true")
+    print "Deployed RPM to %s"
