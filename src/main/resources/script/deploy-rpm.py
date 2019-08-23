@@ -30,28 +30,26 @@ def is_snapshot(rpm):
     return snapshot_pattern.match(rpm) is not None
 
 
-def deploy_rpm(nexus_account, nexus_password, repo_url, build_dir, snapshot=True):
+def deploy_rpm(nexus_account, nexus_password, repo_url, build_dir):
     rpms = glob.glob("%s/rpm/*/RPMS/*/*.rpm" % build_dir)
     if len(rpms) == 1:
         rpm = rpms[0]
-        if is_snapshot(rpm) == snapshot:
-            with open(rpm, 'rb') as f:
-                response = requests.put(repo_url + os.path.basename(rpm), data=f, auth=HTTPBasicAuth(nexus_account, nexus_password))
-                if response.status_code != 200:
-                    raise Exception("RPM could not be deployed to repository. Status: %s %s" % (response.status_code, response.reason))
-        else:
-            raise Exception("Excepted a %s RPM but got a %s" % ("snapshot" if snapshot else "release", "snapshot" if is_snapshot(rpm) else "release"))
+        with open(rpm, 'rb') as f:
+            response = requests.put(repo_url + os.path.basename(rpm), data=f, auth=HTTPBasicAuth(nexus_account, nexus_password))
+            if response.status_code != 200:
+                raise Exception("RPM could not be deployed to repository " + repo_url +
+                                ". Status: " + str(response.status_code) + " " + response.reason)
     else:
         raise Exception("Expected 1 RPM found %s, paths: %s" % (len(rpms), ','.join(rpms)))
 
 
 def print_usage():
     print "Uploads a SNAPSHOT RPM to the Nexus Yum repository"
-    print "Usage: ./deploy-rpm.py <nexus_account> <nexus_password> <repo-url> <build_dir> <snapshot>"
+    print "Usage: ./deploy-rpm.py <nexus_account> <nexus_password> <repo-url> <build_dir>"
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 5:
+    if len(sys.argv) < 4:
         print_usage()
         exit(1)
 
@@ -59,7 +57,6 @@ if __name__ == '__main__':
     nexus_password = sys.argv[2]
     repo_url = sys.argv[3]
     build_dir = sys.argv[4]
-    snapshot = sys.argv[5]
 
-    deploy_rpm(nexus_account, nexus_password, repo_url, build_dir, snapshot.lower() == "true")
+    deploy_rpm(nexus_account, nexus_password, repo_url, build_dir)
     print "Deployed RPM to %s" % repo_url
