@@ -30,7 +30,22 @@
     <inceptionYear>2018</inceptionYear>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <snapshot-repository>http://nexus.dans.knaw.nl/repository/maven-snapshots</snapshot-repository>
+        <release-repository>http://nexus.dans.knaw.nl/repository/maven-releases</release-repository>
     </properties>
+    <distributionManagement>
+        <!-- Credentials for server are defined in ~/.m2/settings.xml -->
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <!-- Final slash is important for Nexus ! -->
+            <url>${snapshot-repository}/</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus-releases</id>
+            <!-- Final slash is important for Nexus ! -->
+            <url>${release-repository}/</url>
+        </repository>
+    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
