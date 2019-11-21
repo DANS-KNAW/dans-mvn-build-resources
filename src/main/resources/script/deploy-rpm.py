@@ -44,8 +44,8 @@ def deploy_rpm(nexus_account, nexus_password, repo_url, build_dir):
 
 
 def print_usage():
-    print "Uploads a SNAPSHOT RPM to the Nexus Yum repository"
-    print "Usage: ./deploy-rpm.py <nexus_account> <nexus_password> <repo-url> <build_dir>"
+    print("Uploads a SNAPSHOT RPM to the Nexus Yum repository")
+    print("Usage: ./deploy-rpm.py <nexus_account> <nexus_password> <repo-url> <build_dir>")
 
 
 if __name__ == '__main__':
@@ -59,4 +59,4 @@ if __name__ == '__main__':
     build_dir = sys.argv[4]
 
     deploy_rpm(nexus_account, nexus_password, repo_url, build_dir)
-    print "Deployed RPM to %s" % repo_url
+    print("Deployed RPM to %s" % repo_url)
